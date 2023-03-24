@@ -25,7 +25,7 @@
         <input
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="password"
-          type="text"
+          type="password"
           placeholder="password"
           v-model="form.password"
         />
@@ -78,7 +78,7 @@ const handleLogin = () => {
 }
 const handleRegister = () => {
   $axios.post("/auth/register", form.value).then(({ data }) => {
-    alert('注册成功')
+    alert('注册成功，请登录')
     type.value = 'login'
     form.value.password = ''
   }).catch(err => {
