@@ -72,7 +72,8 @@ const handleLogin = () => {
     store.commit('setUserInfo', data)
     router.push('/posts')
   }).catch(err => {
-    alert(err)
+    alert(err.response.data.error)
+    console.log(err)
   })
 }
 const handleRegister = () => {
@@ -81,7 +82,8 @@ const handleRegister = () => {
     type.value = 'login'
     form.value.password = ''
   }).catch(err => {
-    alert(err)
+    alert(err.response.data.error)
+    console.log(err)
   })
 }
 </script>
