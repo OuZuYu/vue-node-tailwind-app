@@ -4,17 +4,28 @@ const { Users } = require('../models')
 const AuthenticationControllerPolicy = require('../policies/AuthenticationControllerPolicy')
 
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
+
 
 router.post('/register',
     AuthenticationControllerPolicy.register, // 校验
     async (req, res) => {
       try {
-        const user = await Users.create(req.body)
-        res.json(user)
+        const reqBody = req.body
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(reqBody.password, salt);
+        const user = await Users.create({username: reqBody.username, password: hashedPassword})
+        // const userJson = user.get({ plain: true, attributes: { exclude: ['password'] } });
+        res.json({username: user.username, msg: '注册成功'})
       } catch (err) {
-        res.status(400).send({
-          error: '用户名已被注册'
-        })
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          res.status(400).send({
+            error: '账号已被注册'
+          })
+        } else {
+          console.error(err);
+        }
       }
     })
 
@@ -33,9 +44,10 @@ router.post('/login',
           })
         }
 
-        if (user.password === password) {
+        const match = bcrypt.compareSync(password, user.password);
+        if (match) {
           const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '7d' })
-          res.json({user, token})
+          res.json({username: user.username, token, msg: '登录成功'})
         } else {
           res.status(403).json({
             error: '密码错误'
