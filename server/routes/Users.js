@@ -39,9 +39,10 @@ router.post('/login',
         })
 
         if (!user) {
-          res.status(403).json({
+          res.status(403).send({
             error: '账号错误'
           })
+          return
         }
 
         const match = bcrypt.compareSync(password, user.password);
