@@ -3,12 +3,24 @@ const router = express.Router()
 const { Comments } = require('../models')
 
 router.get('/:postId', async (req, res) => {
-  const list = await Comments.findAll({ where: { PostId: req.params.postId }})
-  res.json(list)
+  try {
+    const list = await Comments.findAll({ where: { PostId: req.params.postId }})
+    res.json(list)
+  } catch (err) {
+    res.status(500).json({
+      error: err
+    })
+  }
 })
 router.post('/', async (req, res) => {
-  const comment = await Comments.create(req.body)
-  res.json(comment)
+  try {
+    const comment = await Comments.create(req.body)
+    res.json(comment)
+  } catch (err) {
+    res.status(500).json({
+      error: err
+    })
+  }
 })
 
 module.exports = router
