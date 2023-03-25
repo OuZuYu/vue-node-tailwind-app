@@ -27,6 +27,7 @@
           class="rounded overflow-hidden shadow-lg border border-gray-200 mb-2"
           v-for="post in listOfPosts"
           :key="post.id"
+          @click="navigateToDetail(post.id)"
         >
           <div class="px-6 py-4">
             <div class="flex justify-between">
@@ -123,6 +124,12 @@ const handlePost = () => {
     isPostDialogShow.value = false
     getPosts()
   });
+}
+
+const navigateToDetail = (id) => {
+  router.push({
+    path: `/posts/${id}`
+  })
 }
 
 onMounted(() => {

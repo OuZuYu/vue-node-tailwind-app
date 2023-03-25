@@ -13,4 +13,9 @@ router.post('/', async (req, res) => {
   res.json(post)
 })
 
+router.get('/:id', async (req, res) => {
+  const post = await Posts.findByPk(req.params.id)
+  res.json(post)
+})
+
 module.exports = router
