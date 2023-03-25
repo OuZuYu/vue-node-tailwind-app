@@ -83,6 +83,7 @@ const handleComment = () => {
   $axios.post(`/comments`, commentForm.value).then(({ data }) => {
     console.log('success')
     isCommentDialogShow.value = false
+    getComments()
   });
 }
 
